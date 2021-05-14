@@ -1,0 +1,35 @@
+---
+
+# moved this config needed for kubeadm to after docker install
+
+- name: "sysctl set net.bridge.bridge-nf-call-iptables"
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+
+# setup the repo
+
+- name: "Add Kubernetes yum repo"
+  template: 
+    src: kubernetes.repo.j2
+    dest: /etc/yum.repos.d/kubernetes.repo
+    owner: root
+    group: root
+
+
+# Add GPG key to rpm database
+
+- name: "Add Kubernetes YUM GPG key to RPM database"
+  rpm_key:
+    state: present
+    key: "https://packages.cloud.google.com/yum/doc/yum-key.gpg"
+
+- name: "Add Kubernetes Package GPG key to RPM database"
+  rpm_key:
+    state: present
+    key: "https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg"
+

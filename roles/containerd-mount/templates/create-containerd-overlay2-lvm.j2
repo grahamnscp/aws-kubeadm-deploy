@@ -1,0 +1,10 @@
+#!/bin/sh
+
+/usr/sbin/pvcreate {{ docker_storage_device }}
+/usr/sbin/vgcreate containerd {{ docker_storage_device }}
+/usr/sbin/lvcreate --wipesignatures y -n containerd -l 95%VG containerd
+/sbin/mkfs.xfs -n ftype=1 /dev/containerd/containerd
+mkdir -p /var/lib/containerd
+grep -q -F 'containerd' /etc/fstab || echo '/dev/containerd/containerd /var/lib/containerd xfs defaults 0 0' >> /etc/fstab
+mount /var/lib/containerd
+/sbin/restorecon -Rv /var/lib/containerd

@@ -1,0 +1,17 @@
+---
+
+- name: "Creating yum versionlock script.."
+  template:
+    src: yum-versionlock-kube.sh.j2
+    dest: /root/yum-versionlock-kube.sh
+    owner: root
+    group: root
+    mode: 755
+
+- name: "Yum version locking kubernetes packages.."
+  shell: /root/yum-versionlock-kube.sh 2>&1 | /bin/tee -a /root/yum-versionlock-kube.log
+  args:
+    executable: /bin/sh
+    chdir: /root
+    creates: /root/yum-versionlock-kube.log
+

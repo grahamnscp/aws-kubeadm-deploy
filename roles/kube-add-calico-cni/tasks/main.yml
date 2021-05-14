@@ -1,0 +1,25 @@
+---
+
+- name: "Creating deploy-calico-cni.sh script.."
+  template:
+    src: deploy-calico-cni.sh.j2
+    dest: /root/deploy-calico-cni.sh
+    owner: root
+    group: root
+    mode: 755
+
+- name: "Copying calico.yaml file to master1.."
+  template:
+    src: calico.yaml.j2
+    dest: /root/calico.yaml
+    owner: root
+    group: root
+    mode: 644
+
+- name: "Deploying calico CNI .."
+  shell: /root/deploy-calico-cni.sh 2>&1 | /bin/tee -a /root/deploy-calico-cni.log
+  args:
+    executable: /bin/sh
+    chdir: /root
+    creates: /root/deploy-calico-cni.log
+

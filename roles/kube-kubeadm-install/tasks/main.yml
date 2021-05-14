@@ -1,0 +1,12 @@
+---
+
+- name: "Install kubeadm"
+  yum:
+    name: kubeadm
+    state: present
+
+- name: "Ensure kubelet is enabled and started"
+  systemd:
+    name: kubelet
+    state: started
+    enabled: yes

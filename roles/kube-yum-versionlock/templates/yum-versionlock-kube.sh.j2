@@ -1,0 +1,5 @@
+#!/bin/bash
+
+yum versionlock kubeadm-{{ kubernetes_package_version }}
+yum versionlock kubelet-{{ kubernetes_package_version }}
+yum versionlock kubectl-{{ kubernetes_package_version }}

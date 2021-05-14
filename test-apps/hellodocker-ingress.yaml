@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hellodocker
+  labels:
+    app: helloapp
+spec:
+  selector:
+    matchLabels:
+      app: helloapp
+      tier: helloweb
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: helloapp
+        tier: helloweb
+    spec:
+      containers:
+      - name: hellodocker
+        image: grahamh/hello-docker-web:4.0
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 8080
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hellodocker
+  labels:
+    app: helloapp
+    tier: helloweb
+spec:
+  type: LoadBalancer
+  ports: 
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: helloapp
+    tier: helloweb

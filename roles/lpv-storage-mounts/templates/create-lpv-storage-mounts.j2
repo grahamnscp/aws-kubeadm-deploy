@@ -1,0 +1,29 @@
+#!/bin/sh
+
+/usr/sbin/pvcreate {{ lpv_storage_device }}
+/usr/sbin/vgcreate disks {{ lpv_storage_device }}
+
+/usr/sbin/lvcreate --wipesignatures y -n vol1 -l 24%VG disks
+/usr/sbin/lvcreate --wipesignatures y -n vol2 -l 24%VG disks
+/usr/sbin/lvcreate --wipesignatures y -n vol3 -l 24%VG disks
+/usr/sbin/lvcreate --wipesignatures y -n vol4 -l 24%VG disks
+
+/sbin/mkfs.xfs /dev/disks/vol1
+/sbin/mkfs.xfs /dev/disks/vol2
+/sbin/mkfs.xfs /dev/disks/vol3
+/sbin/mkfs.xfs /dev/disks/vol4
+
+mkdir -p /mnt/disks/{vol1,vol2,vol3,vol4}
+
+grep -q -F 'vol1' /etc/fstab || echo '/dev/disks/vol1 /mnt/disks/vol1 xfs defaults 0 0' >> /etc/fstab
+grep -q -F 'vol2' /etc/fstab || echo '/dev/disks/vol2 /mnt/disks/vol2 xfs defaults 0 0' >> /etc/fstab
+grep -q -F 'vol3' /etc/fstab || echo '/dev/disks/vol3 /mnt/disks/vol3 xfs defaults 0 0' >> /etc/fstab
+grep -q -F 'vol4' /etc/fstab || echo '/dev/disks/vol4 /mnt/disks/vol4 xfs defaults 0 0' >> /etc/fstab
+
+mount /mnt/disks/vol1
+mount /mnt/disks/vol2
+mount /mnt/disks/vol3
+mount /mnt/disks/vol4
+
+/sbin/restorecon -Rv /mnt/disks/{vol1,vol2,vol3,vol4}
+

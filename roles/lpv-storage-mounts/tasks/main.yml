@@ -1,0 +1,19 @@
+---
+
+# Setup kubernetes LPV storage
+
+- name: "Creating kubernetes lpv storage script.."
+  template:
+    src: create-lpv-storage-mounts.j2
+    dest: /root/create-lpv-storage-mounts.sh
+    owner: root
+    group: root
+    mode: 755
+
+- name: "Creating kubernetes lpv storage.."
+  shell: /root/create-lpv-storage-mounts.sh 2>&1 | /bin/tee -a /root/create-lpv-storage-mounts.log
+  args:
+    executable: /bin/sh
+    chdir: /root
+    creates: /root/create-lpv-storage-mounts.log
+

@@ -1,0 +1,39 @@
+---
+
+- hosts: all
+  roles:
+  - accept-host-keys
+  - ntp
+  - pre-deploy
+#  - set-hostname  # cannot change the instance hostname as cloud-provider uses metadata server
+#  - update-packages # takes a while so commented out 
+  - firewall
+  - docker-install
+  - kube-repo
+
+- hosts: bootstrap
+  roles:
+  - kube-yum-versionlock
+  - kubectl-cli-install
+
+- hosts: masters nodes
+  roles:
+  - kube-yum-versionlock
+  - kube-kubeadm-install
+
+- hosts: master1
+  roles:
+  - kube-kubeadm-init-master1
+  - pause-minutes
+  - kube-add-calico-cni
+  - kube-add-storageclass
+
+- hosts: master2 master3
+  roles:
+  - kube-kubeadm-join-master
+  - pause-minutes
+
+- hosts: nodes
+  roles:
+  - kube-kubeadm-join-node
+

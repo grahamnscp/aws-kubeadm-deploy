@@ -1,0 +1,48 @@
+# Ansible 'hosts' template file used to generate actual hosts file
+#
+# Param values a populated by run-terraform.sh
+#
+
+[all:vars]
+
+# for AWS
+aws_region=##REGION##
+ansible_user=centos
+ansible_port=22
+ansible_become=yes
+ansible_ssh_private_key_file=##ANSIBLE_SSH_PRIVATE_KEY_FILE##
+ansible_ssh_extra_args='-o StrictHostKeyChecking=no'
+
+# Ansible Options
+timeout=120
+deprecation_warnings=False
+
+# Deployment Switches
+linux_type=centos7
+firewall_enabled=false
+firewall_type=iptables
+docker_storage_driver=overlay2
+daemon_selinux=false
+
+# DNS - Route53
+domain_name=##DOMAIN_NAME##
+admin_external_fqdn=##ADMIN_EXTERNAL_FQDN##
+
+# Docker Config
+docker_storage_device=/dev/xvdb
+
+# Local Persistent Volumes Storage
+lpv_storage_device=/dev/xvdc
+
+# Kubernetes package version to yum versionlock
+kubernetes_package_version=##KUBERNETES_PACKAGE_VERSION##
+
+
+# Instances:
+[bootstrap]
+bootstrap ansible_host=##BOOTSTRAP_PUBLIC_IP##  fqdn=##BOOTSTRAP_NAME##
+
+[masters]
+master1 ansible_host=##MASTER_PUBLIC_IP_1##  fqdn=##MASTER_NAME_1##
+master2 ansible_host=##MASTER_PUBLIC_IP_2##  fqdn=##MASTER_NAME_2##
+master3 ansible_host=##MASTER_PUBLIC_IP_3##  fqdn=##MASTER_NAME_3##

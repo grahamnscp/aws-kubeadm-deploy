@@ -1,0 +1,19 @@
+---
+
+# Setup containerd storage
+
+- name: "Creating containerd-overlay2 storage script.."
+  template:
+    src: create-containerd-overlay2-lvm.j2
+    dest: /root/create-containerd-overlay2-lvm.sh
+    owner: root
+    group: root
+    mode: 755
+
+- name: "Creating containerd-overlay2 storage.."
+  shell: /root/create-containerd-overlay2-lvm.sh 2>&1 | /bin/tee -a /root/create-containerd-overlay2-lvm.log
+  args:
+    executable: /bin/sh
+    chdir: /root
+    creates: /root/create-containerd-overlay2-lvm.log
+

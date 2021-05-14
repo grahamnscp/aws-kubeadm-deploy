@@ -1,0 +1,34 @@
+---
+
+- name: "Creating kubeadm-join-node.sh script.."
+  template:
+    src: kubeadm-join-node.sh.j2
+    dest: /root/kubeadm-join-node.sh
+    owner: root
+    group: root
+    mode: 755
+
+# Params from kubeadm init:
+#   token
+#   discovery_token_ca_cert_hash
+#   certificate_key
+#
+- name: "Include variables from join-params.yaml"
+  include_vars:
+    file: working-files/join-params.yaml
+
+- name: "Generating ConfigMap YAML file.."
+  template:
+    src: kubeadm-node-join-configmap.yaml.j2
+    dest: /root/kubeadm-node-join-configmap.yaml
+    owner: root
+    group: root
+    mode: 644
+
+- name: "Running kubeadm join node with config file.."
+  shell: /root/kubeadm-join-node.sh 2>&1 | /bin/tee -a /root/kubeadm-join-node.log
+  args:
+    executable: /bin/sh
+    chdir: /root
+    creates: /root/kubeadm-join-node.log
+

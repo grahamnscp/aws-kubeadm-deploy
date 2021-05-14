@@ -1,0 +1,29 @@
+all:
+  vars:
+    ansible_user: centos
+    ansible_port: 22
+    ansible_become: yes
+    ansible_ssh_private_key_file: "~/.ssh/##ANSIBLE_SSH_PRIVATE_KEY_FILE##
+
+    timeout: 120
+    deprecation_warnings: False
+
+    domain_name: ##DOMAIN_NAME##
+    admin_external_fqdn: ##ADMIN_EXTERNAL_FQDN##
+
+    control_plane_endpoint: "##ADMIN_EXTERNAL_FQDN##:6443"
+
+control-plane:
+  hosts:
+    ##MASTER_IP_1##:
+      ansible_host: ##MASTER_NAME_1##
+      node_pool: control-plane
+    ##MASTER_IP_2##:
+      ansible_host: ##MASTER_NAME_2##
+      node_pool: control-plane
+    ##MASTER_IP_3##:
+      ansible_host: ##MASTER_NAME_3##
+      node_pool: control-plane
+
+node:
+  hosts:

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+CONTROL_PLANE_ENDPOINT={{ admin_external_fqdn }}
+
+# Perform HA cluster init on first control plane master
+cd /root
+#kubeadm init --control-plane-endpoint $CONTROL_PLANE_ENDPOINT --node-name master1 --upload-certs 
+#kubeadm init --control-plane-endpoint $CONTROL_PLANE_ENDPOINT --upload-certs
+kubeadm init --config=/root/kubeadm-configmap.yaml --upload-certs
+
+
+# Extract join commands parameters from log file
+JOIN_NODE1=`cat ~/kubeadm-init-master1.log | grep --after-context=2 "kubeadm join" | head -1 | awk '{printf("%s %s %s %s %s"),$1,$2,$3,$4,$5}'`
+JOIN_NODE2=`cat ~/kubeadm-init-master1.log | grep --after-context=2 "kubeadm join" | tail -2 | tail -1`
+JOIN_MASTER_PARAMS=`cat ~/kubeadm-init-master1.log | grep --after-context=2 "kubeadm join" | grep "control-plane"`
+
+# Generate YAML params file:
+TOKEN=`echo $JOIN_NODE1 | awk '{print $5}'`
+DISCOVERY_TOKEN_CA_CERT_HASH=`echo $JOIN_NODE2 | awk '{print $2}'`
+CERTIFICATE_KEY=`echo $JOIN_MASTER_PARAMS | awk '{print $3}'`
+echo "---" > /root/join-params.yaml
+echo "token: $TOKEN" >> /root/join-params.yaml
+echo "discovery_token_ca_cert_hash: $DISCOVERY_TOKEN_CA_CERT_HASH" >> /root/join-params.yaml
+echo "certificate_key: $CERTIFICATE_KEY"  >> /root/join-params.yaml
+

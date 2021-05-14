@@ -1,0 +1,37 @@
+---
+
+- name: "Creating kubeadm-init-master1.sh script.."
+  template:
+    src: kubeadm-init-master1.sh.j2
+    dest: /root/kubeadm-init-master1.sh
+    owner: root
+    group: root
+    mode: 755
+
+- name: "Generating ConfigMap YAML file.."
+  template:
+    src: kubeadm-configmap.yaml.j2
+    dest: /root/kubeadm-configmap.yaml
+    owner: root
+    group: root
+    mode: 644
+
+- name: "Running kubeadm init on first control-plane master.."
+  shell: /root/kubeadm-init-master1.sh 2>&1 | /bin/tee -a /root/kubeadm-init-master1.log
+  args:
+    executable: /bin/sh
+    chdir: /root
+    creates: /root/kubeadm-init-master1.log
+
+- name: "Retrieve kubeconfig admin config file locally.."
+  fetch:
+    src: /etc/kubernetes/admin.conf
+    dest: working-files/admin.conf
+    flat: yes
+
+- name: "Retrieve kubeadm join params yaml file locally.."
+  fetch:
+    src: /root/join-params.yaml
+    dest: working-files/join-params.yaml
+    flat: yes
+

@@ -1,0 +1,5 @@
+---
+
+- name: "Pausing for 1 minute"
+  pause:
+    minutes: 1

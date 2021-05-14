@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# subsitute private hostname in joinconfigmap
+HOSTNAME=`hostname -f`
+sed -i "s/##THIS_HOSTNAME##/${HOSTNAME}/g" /root/kubeadm-node-join-configmap.yaml
+
+# Join the cluster
+kubeadm join --config=/root/kubeadm-node-join-configmap.yaml

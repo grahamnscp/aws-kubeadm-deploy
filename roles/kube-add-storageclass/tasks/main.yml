@@ -1,0 +1,25 @@
+---
+
+- name: "Creating deploy-storageclass.sh script.."
+  template:
+    src: deploy-storageclass.sh.j2
+    dest: /root/deploy-storageclass.sh
+    owner: root
+    group: root
+    mode: 755
+
+- name: "Copying aws-ebs-storageclass.yaml file to master1.."
+  template:
+    src: aws-ebs-storageclass.yaml.j2
+    dest: /root/aws-ebs-storageclass.yaml
+    owner: root
+    group: root
+    mode: 644
+
+- name: "Deploying StorageClass.."
+  shell: /root/deploy-storageclass.sh 2>&1 | /bin/tee -a /root/deploy-storageclass.log
+  args:
+    executable: /bin/sh
+    chdir: /root
+    creates: /root/deploy-storageclass.log
+

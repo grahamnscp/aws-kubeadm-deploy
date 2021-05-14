@@ -1,0 +1,6 @@
+---
+
+- name: "Install kubectl only"
+  yum:
+    name: kubectl
+    state: present
