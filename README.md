@@ -1,5 +1,5 @@
-# Terraform for Infra only
-Terraform and ansible to provision a kubernetes cluster deployment on AWS using kubeadm with cloud-provider config
+# Terraform and Ansible to deploy a kubernetes cluster on AWS EC2 as IaaS
+Terraform and ansible to provision a kubernetes cluster deployment on AWS using kubeadm with cloud-provider = AWS config
 
 ## Generate tf/variables.tf from template
 Custom config is defined in params.sh which is used by setup-terraform-vars.sh to generate the variables.tf from a template file variables.tf.template
