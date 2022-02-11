@@ -6,5 +6,5 @@
   "log-opts": {
     "tag":"{{.ImageName}}/{{.Name}}/{{.ID}}"
   },
-  "insecure-registries":["bootstrap.devtest.buildsilab.com:5000"]
+  "insecure-registries":["bootstrap.mykube.example.com:5000"]
 }

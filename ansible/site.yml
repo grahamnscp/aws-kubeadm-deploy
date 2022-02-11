@@ -1,23 +1,25 @@
 ---
 
-- hosts: all
+- hosts: infra-host masters nodes
   roles:
-  - accept-host-keys
   - ntp
   - pre-deploy
-#  - set-hostname  # cannot change the instance hostname as cloud-provider uses metadata server
-#  - update-packages # takes a while so commented out 
+##  - update-packages # takes a while so commented out 
   - firewall
   - docker-install
   - kube-repo
 
-- hosts: bootstrap
+- hosts: infra-host
   roles:
+  - set-hostname
+  - deploy-bind-docker
+  - config-resolv-conf
   - kube-yum-versionlock
   - kubectl-cli-install
 
 - hosts: masters nodes
   roles:
+  - config-resolv-conf
   - kube-yum-versionlock
   - kube-kubeadm-install
 

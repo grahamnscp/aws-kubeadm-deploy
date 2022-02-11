@@ -1,0 +1,68 @@
+#
+# These variables are subsituted into templates
+#
+
+# Terraform Variables - templates/variables.tf.template -> tf/variables.tf
+#
+TF_AWS_INSTANCE_PREFIX=mykube
+TF_AWS_DOMAINNAME=myhosteddomain.com
+TF_AWS_OWNER_TAG=bob
+TF_AWS_EXPIRATION_TAG=6h
+TF_AWS_PURPOSE_TAG="devtest"
+TF_AWS_MY_CIDR="XXX.XXX.XXX.XXX\/32"
+#
+TF_AWS_KEY_NAME=awsbob
+#
+# buildsilab.com
+TF_AWS_ROUTE53_ZONE_ID=XXXXXXXXXXXXXXXXXXXX
+#
+TF_AWS_REGION=us-west-1
+TF_AWS_AVAILABILITY_ZONES=us-west-1a,us-west-1b,us-west-1c
+#
+# aws ec2 describe-images --owners aws-marketplace --filters Name=product-code,Values=aw0evgkw8e5c1q413zgy5pjce --query 'Images[*].[CreationDate,Name,ImageId]' --filters "Name=name,Values=CentOS Linux 7*" --region us-west-1 --output table | sort -r
+# us-west-1 - CentOS Linux release 7.9.2009 (Core) ref: https://wiki.centos.org/Cloud/AWS
+TF_AWS_CENTOS_AMI=ami-08d2d8b00f270d03b
+
+#
+TF_AWS_MASTER_COUNT=3
+TF_AWS_NODE_COUNT=4
+#
+TF_AWS_DOCKER_VOLUME_SIZE=52
+TF_AWS_LPV_VOLUME_SIZE=50
+TF_AWS_PX_VOLUME_SIZE=50
+#
+#t2.large: 2cpu/8GB: $0.1104
+#t3.xlarge: 4cpu/16GB - $0.1984
+#m4.2xlarge: 8cpu/32GB - $0.468
+#m5.4xlarge: 16cpu/64GB - $0.408/hr
+#r5a.4xlarge: 16cpu/128G up to 10g/s - $1.008/hr
+#
+TF_AWS_INFRA_INSTANCE_TYPE=t3.xlarge
+TF_AWS_MASTER_INSTANCE_TYPE=t3.xlarge
+#TF_AWS_NODE_INSTANCE_TYPE=m4.2xlarge
+TF_AWS_NODE_INSTANCE_TYPE=m5.4xlarge
+#TF_AWS_NODE_INSTANCE_TYPE=r5a.4xlarge
+
+#VPC
+TF_VPC_CIDR="172.12.0.0\/16"
+TF_SUBNET_CIDR="172.12.1.0\/24"
+
+
+# Ansible variables
+ANSIBLE_SSH_PRIVATE_KEY_FILE="\~\/.ssh\/awsbob"
+ANSIBLE_USER=centos
+
+# changes with different instance types
+#DOCKER_STORAGE_DEVICE="\/dev\/xvdb"
+DOCKER_STORAGE_DEVICE="\/dev\/nvme1n1"
+
+# https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64/repodata/filelists.xml 
+#KUBERNETES_PACKAGE_VERSION=1.17.8-0
+#KUBERNETES_PACKAGE_VERSION=1.18.5-0
+KUBERNETES_PACKAGE_VERSION=1.20.8-0
+
+AWS_META_DNS=172.12.0.2
+
+DOCKERHUB_USER=dockerbob
+BIND_DOCKER_TAG=mykube
+

@@ -7,13 +7,13 @@
 
 # for AWS
 aws_region=##REGION##
+
+# Ansible Options
 ansible_user=centos
 ansible_port=22
 ansible_become=yes
 ansible_ssh_private_key_file=##ANSIBLE_SSH_PRIVATE_KEY_FILE##
 ansible_ssh_extra_args='-o StrictHostKeyChecking=no'
-
-# Ansible Options
 timeout=120
 deprecation_warnings=False
 
@@ -25,24 +25,31 @@ docker_storage_driver=overlay2
 daemon_selinux=false
 
 # DNS - Route53
-domain_name=##DOMAIN_NAME##
+name_prefix=##SUBDOMAIN##
+route53_domainname=##BASEDOMAIN##
 admin_external_fqdn=##ADMIN_EXTERNAL_FQDN##
 
-# Docker Config
-docker_storage_device=/dev/xvdb
+# bind-docker image
+dockerhub_user=##DOCKERHUB_USER##
+bind_docker_tag=##BIND_DOCKER_TAG##
 
-# Local Persistent Volumes Storage
-lpv_storage_device=/dev/xvdc
+# Docker Config
+docker_storage_device=##DOCKER_STORAGE_DEVICE##
+
+# Local Persistent Volumes Storage (not needed when using the cloud-provider option)
+#lpv_storage_device=/dev/xvdc
 
 # Kubernetes package version to yum versionlock
 kubernetes_package_version=##KUBERNETES_PACKAGE_VERSION##
 
 
 # Instances:
-[bootstrap]
-bootstrap ansible_host=##BOOTSTRAP_PUBLIC_IP##  fqdn=##BOOTSTRAP_NAME##
+[infra-host]
+infra ansible_host=##INFRA_PUBLIC_IP##  fqdn=##INFRA_NAME##
 
 [masters]
 master1 ansible_host=##MASTER_PUBLIC_IP_1##  fqdn=##MASTER_NAME_1##
 master2 ansible_host=##MASTER_PUBLIC_IP_2##  fqdn=##MASTER_NAME_2##
 master3 ansible_host=##MASTER_PUBLIC_IP_3##  fqdn=##MASTER_NAME_3##
+
+[nodes]

@@ -15,9 +15,6 @@ case "${UNAME_OUT}" in
     MINGW*)     MACHINE=MinGw;;
     *)          MACHINE="UNKNOWN:${UNAME_OUT}"
 esac
-echo OS is ${MACHINE}
-
-
 
 
 # Subsitute terraform variables to generate variables.tf
@@ -29,6 +26,7 @@ sed -i $SEDBAK "s/##TF_AWS_OWNER_TAG##/$TF_AWS_OWNER_TAG/" ./tf/variables.tf
 sed -i $SEDBAK "s/##TF_AWS_EXPIRATION_TAG##/$TF_AWS_EXPIRATION_TAG/" ./tf/variables.tf
 sed -i $SEDBAK "s/##TF_AWS_PURPOSE_TAG##/$TF_AWS_PURPOSE_TAG/" ./tf/variables.tf
 sed -i $SEDBAK "s/##TF_AWS_KEY_NAME##/$TF_AWS_KEY_NAME/" ./tf/variables.tf
+sed -i $SEDBAK "s/##TF_AWS_MY_CIDR##/$TF_AWS_MY_CIDR/" ./tf/variables.tf
 sed -i $SEDBAK "s/##TF_AWS_INSTANCE_PREFIX##/$TF_AWS_INSTANCE_PREFIX/" ./tf/variables.tf
 sed -i $SEDBAK "s/##TF_AWS_DOMAINNAME##/$TF_AWS_DOMAINNAME/" ./tf/variables.tf
 sed -i $SEDBAK "s/##TF_AWS_ROUTE53_ZONE_ID##/$TF_AWS_ROUTE53_ZONE_ID/" ./tf/variables.tf
@@ -40,11 +38,13 @@ sed -i $SEDBAK "s/##TF_AWS_NODE_COUNT##/$TF_AWS_NODE_COUNT/" ./tf/variables.tf
 sed -i $SEDBAK "s/##TF_AWS_DOCKER_VOLUME_SIZE##/$TF_AWS_DOCKER_VOLUME_SIZE/" ./tf/variables.tf
 sed -i $SEDBAK "s/##TF_AWS_LPV_VOLUME_SIZE##/$TF_AWS_LPV_VOLUME_SIZE/" ./tf/variables.tf
 sed -i $SEDBAK "s/##TF_AWS_PX_VOLUME_SIZE##/$TF_AWS_PX_VOLUME_SIZE/" ./tf/variables.tf
-sed -i $SEDBAK "s/##TF_AWS_BOOTSTRAP_INSTANCE_TYPE##/$TF_AWS_BOOTSTRAP_INSTANCE_TYPE/" ./tf/variables.tf
+sed -i $SEDBAK "s/##TF_AWS_INFRA_INSTANCE_TYPE##/$TF_AWS_INFRA_INSTANCE_TYPE/" ./tf/variables.tf
 sed -i $SEDBAK "s/##TF_AWS_MASTER_INSTANCE_TYPE##/$TF_AWS_MASTER_INSTANCE_TYPE/" ./tf/variables.tf
 sed -i $SEDBAK "s/##TF_AWS_NODE_INSTANCE_TYPE##/$TF_AWS_NODE_INSTANCE_TYPE/" ./tf/variables.tf
+sed -i $SEDBAK "s/##TF_VPC_CIDR##/$TF_VPC_CIDR/" ./tf/variables.tf
+sed -i $SEDBAK "s/##TF_SUBNET_CIDR##/$TF_SUBNET_CIDR/" ./tf/variables.tf
 
+
+# All done, tidy up
 rm ./tf/variables.tf.bak
-
 exit 0
-

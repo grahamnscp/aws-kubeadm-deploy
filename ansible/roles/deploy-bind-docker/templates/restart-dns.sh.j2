@@ -1,0 +1,13 @@
+#!/bin/bash
+
+cd /root
+docker stop {{ bind_docker_tag }}-dns
+docker rm {{ bind_docker_tag }}-dns
+docker pull {{ dockerhub_user }}/bind-docker:{{ bind_docker_tag }}
+
+docker run -it -d --restart unless-stopped --name={{ bind_docker_tag }}-dns \
+  --dns=8.8.8.8 --dns=8.8.4.4 -p 53:53/udp -p 53:53 \
+  {{ dockerhub_user }}/bind-docker:{{ bind_docker_tag }}
+
+docker logs {{ bind_docker_tag }}-dns
+

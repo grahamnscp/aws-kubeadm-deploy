@@ -3,10 +3,8 @@
 resource "aws_elb" "admin" {
   name = "${var.name_prefix}-admin"
 
-  security_groups = ["${aws_security_group.admin-elb.id}" ]
+  security_groups = ["${aws_security_group.instance-sg.id}" ]
   subnets = ["${aws_subnet.nw-subnet.id}"]
-
-#  availability_zones = ["${split(",", data.aws_availability_zones.available.names[1])}"]
 
   listener {
     instance_port = 443
@@ -37,7 +35,8 @@ resource "aws_elb" "admin" {
     interval = 30
   }
 
-  instances = ["${aws_instance.master.*.id}"]
+  instances = "${aws_instance.master.*.id}"
+
 
   idle_timeout = 240
   cross_zone_load_balancing = true
@@ -45,13 +44,12 @@ resource "aws_elb" "admin" {
   connection_draining_timeout = 400
 }
 
+
 resource "aws_elb" "apps" {
   name = "${var.name_prefix}-apps"
 
-  security_groups = [ "${aws_security_group.apps-elb.id}", ]
+  security_groups = [ "${aws_security_group.instance-sg.id}", ]
   subnets = ["${aws_subnet.nw-subnet.id}"]
-
-#  availability_zones = ["${split(",", data.aws_availability_zones.available.names[1])}"]
 
   listener {
     instance_port = 80
@@ -103,7 +101,7 @@ resource "aws_elb" "apps" {
     interval = 30
   }
 
-  instances = ["${aws_instance.node.*.id}"]
+  instances = "${aws_instance.node.*.id}"
 
   idle_timeout = 240
   cross_zone_load_balancing = true

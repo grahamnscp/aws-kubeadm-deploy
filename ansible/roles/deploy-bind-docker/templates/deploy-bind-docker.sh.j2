@@ -1,0 +1,5 @@
+#!/bin/sh -x
+
+docker run -it -d --restart unless-stopped --name={{ bind_docker_tag }}-dns \
+  --dns=8.8.8.8 --dns=8.8.4.4 -p 53:53/udp -p 53:53 \
+  {{ dockerhub_user }}/bind-docker:{{ bind_docker_tag }}

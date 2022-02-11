@@ -1,0 +1,15 @@
+# build
+
+source ../params.sh
+
+DOCKERHUB_USER=$DOCKERHUB_USER
+TAG=$BIND_DOCKER_TAG
+
+docker build -t bind-docker:$TAG .
+docker tag bind-docker:$TAG $DOCKERHUB_USER/bind-docker:$TAG
+docker push $DOCKERHUB_USER/bind-docker:$TAG
+
+# deploy
+docker run -it -d --restart unless-stopped --name=$TAG-dns \
+  --dns=8.8.8.8 --dns=8.8.4.4 -p 53:53/udp -p 53:53 \
+  $DOCKERHUB_USER/bind-docker:$TAG

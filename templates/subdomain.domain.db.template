@@ -1,0 +1,16 @@
+$ORIGIN ##DOMAIN##.
+$TTL 1M
+@     IN SOA  @ infra.##DOMAIN##. (
+    		10     ; serial
+                1M    ; refresh
+                1H    ; retry
+                1D    ; expire
+                1M )  ; minimum
+;
+;
+       NS  infra.##DOMAIN##.
+;
+   IN  MX 10 infra.##DOMAIN##.
+;
+infra             IN      A     ##INFRA_IP_NUM##
+;

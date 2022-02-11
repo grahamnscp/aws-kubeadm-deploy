@@ -2,8 +2,8 @@
 
 # Bootstrap Instance:
 #
-resource "aws_instance" "bootstrap" {
-  instance_type = "${var.bootstrap_instance_type}"
+resource "aws_instance" "infra" {
+  instance_type = "${var.infra_instance_type}"
   ami           = "${var.aws_centos_ami}"
   key_name      = "${var.key_name}"
 
@@ -23,13 +23,13 @@ resource "aws_instance" "bootstrap" {
 
 #  count = "1"
 
-  vpc_security_group_ids = ["${aws_security_group.instance.id}"]
+  vpc_security_group_ids = ["${aws_security_group.instance-sg.id}"]
   subnet_id              = "${aws_subnet.nw-subnet.id}"
 
   user_data              = "${file("userdata.sh")}"
 
   tags = {
-    Name = "${var.name_prefix}_bootstrap"
+    Name = "${var.name_prefix}_infra"
     owner = "${var.owner_tag}"
     expiration = "${var.expiration_tag}"
     purpose = "${var.purpose_tag}"
@@ -61,8 +61,7 @@ resource "aws_instance" "master" {
 
   count = "${var.master_count}"
 
-#  security_groups = [ "${aws_security_group.instance.id}" ]
-  vpc_security_group_ids = ["${aws_security_group.instance.id}"]
+  vpc_security_group_ids = ["${aws_security_group.instance-sg.id}"]
   subnet_id              = "${aws_subnet.nw-subnet.id}"
 
   user_data              = "${file("userdata.sh")}"
@@ -103,18 +102,17 @@ resource "aws_instance" "node" {
     delete_on_termination = true
   }
 
-  # Third disk to carve up for localpersistentvolumes
-  ebs_block_device {
-    device_name = "/dev/sdc"
-    volume_size = "${var.lpv_volume_size}"
-    volume_type = "gp2"
-    delete_on_termination = true
-  }
+#  # Third disk to carve up for localpersistentvolumes
+#  ebs_block_device {
+#    device_name = "/dev/sdc"
+#    volume_size = "${var.lpv_volume_size}"
+#    volume_type = "gp2"
+#    delete_on_termination = true
+#  }
 
   count = "${var.node_count}"
 
-#  security_groups = [ "${aws_security_group.instance.id}" ]
-  vpc_security_group_ids = ["${aws_security_group.instance.id}"]
+  vpc_security_group_ids = ["${aws_security_group.instance-sg.id}"]
   subnet_id              = "${aws_subnet.nw-subnet.id}"
 
   user_data              = "${file("userdata.sh")}"

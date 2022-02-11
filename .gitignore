@@ -1,0 +1,12 @@
+# gitignore
+
+.DS_Store
+.DS_Store?
+
+params.sh
+
+tf/.terraform*
+tf/variables
+
+ansbile/hosts
+
