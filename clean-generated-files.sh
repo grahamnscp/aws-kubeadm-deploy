@@ -8,7 +8,6 @@ test -e ansible/working-files/join-params.yaml && rm ansible/working-files/join-
 
 # clean generated dns files
 test -e ansible/working-files/resolv.conf && rm ansible/working-files/resolv.conf
-test -e ansible/named.conf.docker && rm bind-docker/configs/named.conf.docker
 test -e bind-docker/configs/named.conf.docker && rm bind-docker/configs/named.conf.docker
 rm -rf bind-docker/varbind/docker/*
 
